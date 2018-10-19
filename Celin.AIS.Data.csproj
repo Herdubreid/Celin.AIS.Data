@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PackageVersion>0.1</PackageVersion>
+    <Authors>Finnur Bragason</Authors>
+    <PackageIconUrl>https://www.gravatar.com/avatar/82cf5b024555fa259f9dd9e448afe2ee</PackageIconUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Herdubreid/Celin.AIS.Data/master/LICENSE</PackageLicenseUrl>
+    <Owners>Bragason and Associates Pty Ltd</Owners>
+    <PackageProjectUrl>https://github.com/Herdubreid/Celin.AIS.Data</PackageProjectUrl>
+    <Summary>A Pidgin AIS Data Parser</Summary>
+    <PackageTags>Celin.AIS</PackageTags>
+    <Title>Celin.AIS.Data</Title>
+    <Description>A Pidgin AIS Data Parser</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pidgin" Version="1.5.0" />
+    <PackageReference Include="Celin.AIS" Version="0.9.0" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+  </ItemGroup>
+</Project>
