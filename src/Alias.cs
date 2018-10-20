@@ -10,8 +10,8 @@ namespace Celin.AIS.Data
         public override string ToString()
         {
             return Prefix is null
-                    ? Id
-                    : string.Format("{0}.{1}", Prefix, Id);
+                ? Id.ToUpper()
+                : string.Format("{0}.{1}", Prefix.ToUpper(), Id.ToUpper());
         }
         protected static Parser<char, string> LString =
             Try(Letter)

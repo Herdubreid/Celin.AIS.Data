@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Pidgin;
 using static Pidgin.Parser;
-namespace Celin
+namespace Celin.AIS.Data
 {
     public class Literal
     {

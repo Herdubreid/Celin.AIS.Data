@@ -66,20 +66,23 @@ namespace Celin.AIS.Data
                 .Between(SkipWhitespaces);
         public static Parser<char, Condition> Parser
         => Map((l, o, r) => new Condition()
-                {
-                    controlId = l.ToString(),
-                    @operator = o.ToString("G"),
-                    value = r.HasValue
-                             ? null
-                             : r.Value
-                                    .Select(e => new AIS.Value())
-                                    .ToArray()
-                },
-                Alias.Parser,
-                QUERY_OPERATOR,
-                Literal.Array
-                .Optional()
-            ).Labelled("Query Condition");
+        {
+            controlId = l.ToString(),
+            @operator = o.ToString("G"),
+            value = r.HasValue
+                       ? r.Value
+                           .Select(e => new Value()
+                               {
+                                   content = e,
+                                   specialValueId = "LITERAL"
+                               }).ToArray()
+                       : null
+        },
+         Alias.Parser,
+         QUERY_OPERATOR,
+         Literal.Array
+         .Optional()
+        ).Labelled("Query Condition");
         public static Parser<char, IEnumerable<Condition>> Array
         => Parser
            .Between(SkipWhitespaces)
