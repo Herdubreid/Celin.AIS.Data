@@ -84,9 +84,9 @@ namespace Celin.AIS.Data
          .Optional()
         ).Labelled("Query Condition");
         public static Parser<char, IEnumerable<Condition>> Array
-        => Parser
-           .Between(SkipWhitespaces)
-           .Separated(Char(','))
+        => Try(Parser)
+           //.Between(SkipWhitespaces)
+           .Separated(Whitespace)
            .Labelled("Query List");
     }
 }

@@ -41,7 +41,9 @@ namespace Celin.AIS.Data
                     direction = t.type == AggregationType.ORDER_BY ? t.attrib : null,
                     column = e.ToString()
                 })),
-             OneOf(SUM,
+               Whitespaces
+               .Then(OneOf(
+                   SUM,
                    MIN,
                    MAX,
                    AVG,
@@ -50,14 +52,14 @@ namespace Celin.AIS.Data
                    AVG_DISTINCT,
                    GROUP,
                    DESC,
-                   ASC)
-                .Before(Whitespace),
-              Alias.Array)
+                   ASC)),
+              Whitespaces
+               .Then(Alias.Array))
              .Labelled("Aggregate Item");
         public static Parser<char, IEnumerable<(AggregationType type, AggregationItem item)>> Array
-        => Parser
-           .Between(SkipWhitespaces)
-           .Separated(Char(';'))
+        => Try(Parser)
+            .Separated(Whitespace)
+            .Between(Char('('),Char(')'))
             .Select(a => a.SelectMany(e => e.items.Select(it => (e.type, it))))
            .Labelled("Aggregation");
     }

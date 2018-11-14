@@ -26,8 +26,8 @@ namespace Celin.AIS.Data
         {
             get
             {
-                return Parser
-                    .Between(SkipWhitespaces)
+                return Try(Parser)
+                    //.Between(SkipWhitespaces)
                     .Separated(Char(','))
                     .Labelled("Literal Array");
             }

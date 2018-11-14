@@ -8,9 +8,7 @@ namespace Celin.AIS.Data
         public string Aliases { get; protected set; } = null;
         public Aggregation Aggregation { get; protected set; } = null;
         public static Parser<char, DataAction> Parser
-        => Try(List.Parser
-               .Select(l => new DataAction() { Aliases = l })
-           .Or(Aggregate.Array
+        => Try(Aggregate.Array
                .Select(a => a.Any()
                        ? a.Aggregate(new DataAction()
                        {
@@ -32,6 +30,8 @@ namespace Celin.AIS.Data
                             return da;
                         })
                        : new DataAction()
-                      )));
+                      ))
+            .Or(List.Parser
+                .Select(l => new DataAction() { Aliases = l }));
     }
 }

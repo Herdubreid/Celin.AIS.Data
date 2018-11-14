@@ -33,15 +33,15 @@ namespace Celin.AIS.Data
             .Select(suf => suf.HasValue ? suf.Value : null))
             .Labelled("Alias");
         public static Parser<char, string> List
-        => Parser
-           .Between(SkipWhitespaces)
+        => Try(Parser)
            .Separated(Char(','))
-           .Select(els => string.Join('|', els))
+           //.Between(Char('('), Char(')'))
+           .Select(els => string.Join("|", els))
            .Labelled("Alias List");
         public static Parser<char, IEnumerable<Alias>> Array
-        => Parser
-           .Between(SkipWhitespaces)
+        => Try(Parser)
            .Separated(Char(','))
+           //.Between(Char('('), Char(')'))
            .Labelled("Alias Array");
     }
 }

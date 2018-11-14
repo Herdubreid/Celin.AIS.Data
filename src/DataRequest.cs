@@ -21,10 +21,15 @@ namespace Celin.AIS.Data
                      : null
         },
          DataSubject.Parser,
-         Try(Whitespace
-           .Then(DataAction.Parser))
-                .Optional(),
-         QryOp.Array
-          .Optional());
+         SkipWhitespaces
+         .Then(
+          DataAction.Parser
+          .Optional()
+         ),
+         SkipWhitespaces
+         .Then(
+          QryOp.Array
+          .Optional()
+         ));
     }
 }
