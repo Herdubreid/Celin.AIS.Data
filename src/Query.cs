@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using Pidgin;
 using static Pidgin.Parser;
+using System;
+
 namespace Celin.AIS.Data
 {
+    public enum QueryType
+    {
+        MATCH_ALL,
+        MATCH_ANY
+    }
     public enum QueryOperator
     {
         BETWEEN,
@@ -22,6 +29,10 @@ namespace Celin.AIS.Data
     }
     public class QryOp
     {
+        protected static readonly Parser<char, QueryType> MATCH_ANY =
+            String("any").ThenReturn(QueryType.MATCH_ANY);
+        protected static readonly Parser<char, QueryType> MATCH_ALL =
+            String("all").ThenReturn(QueryType.MATCH_ALL);
         protected static readonly Parser<char, QueryOperator> BETWEEN =
             String("bw").ThenReturn(QueryOperator.BETWEEN);
         protected static readonly Parser<char, QueryOperator> LIST =
@@ -72,21 +83,29 @@ namespace Celin.AIS.Data
             value = r.HasValue
                        ? r.Value
                            .Select(e => new Value()
-                               {
-                                   content = e,
-                                   specialValueId = "LITERAL"
-                               }).ToArray()
+                           {
+                               content = e,
+                               specialValueId = "LITERAL"
+                           }).ToArray()
                        : null
         },
-         Alias.Parser,
+         SkipWhitespaces
+         .Then(Alias.Parser),
          QUERY_OPERATOR,
          Literal.Array
          .Optional()
         ).Labelled("Query Condition");
         public static Parser<char, IEnumerable<Condition>> Array
         => Try(Parser)
-           //.Between(SkipWhitespaces)
            .Separated(Whitespace)
            .Labelled("Query List");
+        public static Parser<char, ValueTuple<QueryType, IEnumerable<Condition>>> Query
+            => Map((t, c) => new ValueTuple<QueryType, IEnumerable<Condition>>(t, c),
+            Try(MATCH_ANY)
+            .Or(MATCH_ALL),
+            SkipWhitespaces
+            .Then(
+                Array
+                .Between(Char('('), Char(')'))));
     }
 }

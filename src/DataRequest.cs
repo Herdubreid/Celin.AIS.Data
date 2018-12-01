@@ -11,13 +11,16 @@ namespace Celin.AIS.Data
         {
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
-            dataServiceType = a.HasValue && a.Value.Aggregation != null ? "AGGREGATE" : "BROWSE",
+            dataServiceType = a.HasValue && a.Value.Aggregation != null ? "AGGREGATION" : "BROWSE",
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
+            findOnEntry = "TRUE",
             query = q.HasValue
-                     ? q.Value.Any()
-                        ? new Query() { condition = q.Value as List<Condition> }
-                        : null
+                        ? new Query()
+                        {
+                            matchType = q.Value.Item1.ToString("G"),
+                            condition = q.Value.Item2 as List<Condition>
+                        }
                      : null
         },
          DataSubject.Parser,
@@ -28,7 +31,7 @@ namespace Celin.AIS.Data
          ),
          SkipWhitespaces
          .Then(
-          QryOp.Array
+          QryOp.Query
           .Optional()
          ));
     }

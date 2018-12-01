@@ -59,7 +59,7 @@ namespace Celin.AIS.Data
         public static Parser<char, IEnumerable<(AggregationType type, AggregationItem item)>> Array
         => Try(Parser)
             .Separated(Whitespace)
-            .Between(Char('('),Char(')'))
+            .Between(Char('['),Char(']'))
             .Select(a => a.SelectMany(e => e.items.Select(it => (e.type, it))))
            .Labelled("Aggregation");
     }

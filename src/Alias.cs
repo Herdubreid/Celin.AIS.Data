@@ -41,7 +41,7 @@ namespace Celin.AIS.Data
         public static Parser<char, IEnumerable<Alias>> Array
         => Try(Parser)
            .Separated(Char(','))
-           //.Between(Char('('), Char(')'))
+           .Between(Char('('), Char(')'))
            .Labelled("Alias Array");
     }
 }
