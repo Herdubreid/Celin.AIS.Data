@@ -14,7 +14,7 @@ namespace Celin.AIS.Data
                 : string.Format("{0}.{1}", Prefix.ToUpper(), Id.ToUpper());
         }
         protected static Parser<char, string> LString =
-            Try(Letter)
+            Try(SkipWhitespaces.Then(Letter))
                 .Then(LetterOrDigit
                       .ManyString(), (h, t) => h + t);
         static readonly Parser<char, string> AliasSuffix =
@@ -35,7 +35,6 @@ namespace Celin.AIS.Data
         public static Parser<char, string> List
         => Try(Parser)
            .Separated(Char(','))
-           //.Between(Char('('), Char(')'))
            .Select(els => string.Join("|", els))
            .Labelled("Alias List");
         public static Parser<char, IEnumerable<Alias>> Array

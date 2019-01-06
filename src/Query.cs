@@ -103,9 +103,7 @@ namespace Celin.AIS.Data
             => Map((t, c) => new ValueTuple<QueryType, IEnumerable<Condition>>(t, c),
             Try(MATCH_ANY)
             .Or(MATCH_ALL),
-            SkipWhitespaces
-            .Then(
-                Array
-                .Between(Char('('), Char(')'))));
+            Array
+            .Between(Char('('), Char(')')));
     }
 }

@@ -7,7 +7,7 @@ namespace Celin.AIS.Data
         public static Parser<char, string> Parser
         => Try(
                 Alias.List
-                .Between(Char('('), Char(')'))
+                .Between(Char('('), SkipWhitespaces.Then(Char(')')))
             )
            .Labelled("Alias List");
     }
