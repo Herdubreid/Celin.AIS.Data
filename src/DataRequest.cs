@@ -9,6 +9,7 @@ namespace Celin.AIS.Data
         public static Parser<char, DatabrowserRequest> Parser
         => Map((s, a, q) => new DatabrowserRequest()
         {
+            outputType = "GRID_DATA",
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
             dataServiceType = a.HasValue && a.Value.Aggregation != null ? "AGGREGATION" : "BROWSE",
