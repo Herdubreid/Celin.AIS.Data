@@ -1,10 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Celin.AIS.Data", "Celin.AIS.Data.csproj", "{3F28B3B6-2AF4-4B44-920C-BA09E6C1DB1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Celin.AIS", "..\Celin.AIS\Celin.AIS.csproj", "{63281E2C-EE4E-40EF-820B-7E74609F41FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Celin.AIS.Data", "..\Test.Celin.AIS.Data\Test.Celin.AIS.Data.csproj", "{6A68CB2A-E5A1-408F-BA9D-D4F5A0471006}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,10 @@ Global
 		{3F28B3B6-2AF4-4B44-920C-BA09E6C1DB1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F28B3B6-2AF4-4B44-920C-BA09E6C1DB1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F28B3B6-2AF4-4B44-920C-BA09E6C1DB1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63281E2C-EE4E-40EF-820B-7E74609F41FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63281E2C-EE4E-40EF-820B-7E74609F41FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63281E2C-EE4E-40EF-820B-7E74609F41FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63281E2C-EE4E-40EF-820B-7E74609F41FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A68CB2A-E5A1-408F-BA9D-D4F5A0471006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A68CB2A-E5A1-408F-BA9D-D4F5A0471006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A68CB2A-E5A1-408F-BA9D-D4F5A0471006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A68CB2A-E5A1-408F-BA9D-D4F5A0471006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

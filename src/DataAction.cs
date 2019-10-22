@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Pidgin;
 using static Pidgin.Parser;
 namespace Celin.AIS.Data
@@ -12,19 +13,24 @@ namespace Celin.AIS.Data
                .Select(a => a.Any()
                        ? a.Aggregate(new DataAction()
                        {
-                           Aggregation = new Aggregation()
+                           Aggregation = new Aggregation
+                           {
+                               aggregations = new List<AggregationItem>(),
+                               groupBy = new List<AggregationItem>(),
+                               orderBy = new List<AggregationItem>()
+                           }
                        }, (da, e) =>
                         {
                             switch (e.type)
                             {
                                 case AggregationType.AGGREGATIONS:
-                                    da.Aggregation.aggregations.Add(e.item);
+                                    (da.Aggregation.aggregations as List<AggregationItem>).Add(e.item);
                                     break;
                                 case AggregationType.GROUP_BY:
-                                    da.Aggregation.groupBy.Add(e.item);
+                                    (da.Aggregation.groupBy as List<AggregationItem>).Add(e.item);
                                     break;
                                 case AggregationType.ORDER_BY:
-                                    da.Aggregation.orderBy.Add(e.item);
+                                    (da.Aggregation.orderBy as List<AggregationItem>).Add(e.item);
                                     break;
                             }
                             return da;
