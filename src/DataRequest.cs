@@ -6,7 +6,7 @@ namespace Celin.AIS.Data
     public class DataRequest
     {
         public static Parser<char, DatabrowserRequest> Parser
-        => Map((s, a, q) => new DatabrowserRequest()
+        => Map((s, a, q, mx) => new DatabrowserRequest()
         {
             outputType = "GRID_DATA",
             targetName = s.Name.ToUpper(),
@@ -21,7 +21,8 @@ namespace Celin.AIS.Data
                             matchType = q.Value.Item1.ToString("G"),
                             condition = q.Value.Item2 as List<Condition>
                         }
-                     : null
+                     : null,
+            maxPageSize = mx.HasValue ? mx.Value : null
         },
          DataSubject.Parser,
          SkipWhitespaces
@@ -33,6 +34,11 @@ namespace Celin.AIS.Data
          .Then(
           QryOp.Query
           .Optional()
-         ));
+         ),
+         SkipWhitespaces
+         .Then(
+           MaxPageOption.Parser
+           .Optional()
+          ));
     }
 }

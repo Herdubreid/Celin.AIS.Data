@@ -25,9 +25,6 @@
     <PackageReference Include="Pidgin" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

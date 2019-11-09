@@ -14,8 +14,8 @@ namespace Celin.AIS.Data
            .Then(LetterOrDigit
                  .ManyString(), (p, b) => new DataSubject()
                  {
-                    Type = p == 'f' ? "table" : "view",
-                    Name = p + b
+                     Type = p == 'f' ? "table" : "view",
+                     Name = p + b
                  });
     }
 }
