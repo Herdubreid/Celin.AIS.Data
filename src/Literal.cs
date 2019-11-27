@@ -14,22 +14,12 @@ namespace Celin.AIS.Data
                 .ManyString()
                 .Between(Char('"'));
         public static Parser<char, string> Parser
-        {
-            get
-            {
-                return Plain
-                    .Or(Quoted)
-                    .Labelled("Literal");
-            }
-        }
+            => Plain
+               .Or(Quoted)
+               .Labelled("Literal");
         public static Parser<char, IEnumerable<string>> Array
-        {
-            get
-            {
-                return Try(Parser)
-                    .Separated(Char(','))
-                    .Labelled("Literal Array");
-            }
-        }
+            => Try(Parser)
+               .Separated(Char(','))
+               .Labelled("Literal Array");
     }
 }

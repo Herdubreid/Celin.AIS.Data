@@ -1,11 +1,17 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using Pidgin;
-using static Pidgin.Parser;
+﻿using Pidgin;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Pidgin.Parser;
 
 namespace Celin.AIS.Data
 {
+    using QueryDef = ValueTuple<Maybe<AndOrCombinator>, QueryType, IEnumerable<Condition>>;
+    public enum AndOrCombinator
+    {
+        AND,
+        OR
+    }
     public enum QueryType
     {
         MATCH_ALL,
@@ -29,6 +35,10 @@ namespace Celin.AIS.Data
     }
     public class QryOp
     {
+        protected static readonly Parser<char, AndOrCombinator> AND =
+            String("and").ThenReturn(AndOrCombinator.AND);
+        protected static readonly Parser<char, AndOrCombinator> OR =
+            String("or").ThenReturn(AndOrCombinator.OR);
         protected static readonly Parser<char, QueryType> MATCH_ANY =
             String("any").ThenReturn(QueryType.MATCH_ANY);
         protected static readonly Parser<char, QueryType> MATCH_ALL =
@@ -75,7 +85,7 @@ namespace Celin.AIS.Data
                 STR_BLANK,
                 STR_NOT_BLANK)
                 .Between(SkipWhitespaces);
-        public static Parser<char, Condition> Parser
+        public static Parser<char, Condition> Parameter
         => Map((l, o, r) => new Condition()
         {
             controlId = l.ToString(),
@@ -95,15 +105,22 @@ namespace Celin.AIS.Data
          Literal.Array
          .Optional()
         ).Labelled("Query Condition");
-        public static Parser<char, IEnumerable<Condition>> Array
-        => Try(Parser)
+        public static Parser<char, IEnumerable<Condition>> Parameters
+        => Try(Parameter)
            .Separated(Whitespace)
            .Labelled("Query List");
-        public static Parser<char, ValueTuple<QueryType, IEnumerable<Condition>>> Query
-            => Map((t, c) => new ValueTuple<QueryType, IEnumerable<Condition>>(t, c),
-            Try(MATCH_ANY)
-            .Or(MATCH_ALL),
-            Array
+        public static Parser<char, QueryDef> Query
+            => Map((x, t, c) => new QueryDef(x, t, c),
+            Try(AND)
+            .Or(OR)
+            .Optional(),
+            SkipWhitespaces
+            .Then(Try(MATCH_ANY)
+            .Or(MATCH_ALL)),
+            Parameters
             .Between(Char('('), Char(')')));
+        public static Parser<char, IEnumerable<QueryDef>> Queries
+            => Query
+               .Separated(Whitespace);
     }
 }

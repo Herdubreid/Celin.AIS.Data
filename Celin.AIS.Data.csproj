@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageVersion>3.0.0-rc</PackageVersion>
     <Authors>Finnur Bragason</Authors>
     <PackageIconUrl></PackageIconUrl>
@@ -20,7 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Celin.AIS" Version="3.0.0-rc" />
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2" />
     <PackageReference Include="Pidgin" Version="2.2.0" />
   </ItemGroup>
@@ -29,5 +28,8 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Celin.AIS\Celin.AIS.csproj" />
   </ItemGroup>
 </Project>
