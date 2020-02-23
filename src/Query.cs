@@ -121,6 +121,6 @@ namespace Celin.AIS.Data
             .Between(Char('('), Char(')')));
         public static Parser<char, IEnumerable<QueryDef>> Queries
             => Query
-               .Separated(Whitespace);
+               .Separated(Whitespaces);
     }
 }
