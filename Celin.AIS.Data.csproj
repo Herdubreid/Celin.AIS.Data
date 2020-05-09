@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageVersion>3.0.0-rc</PackageVersion>
     <Authors>Finnur Bragason</Authors>
     <PackageIconUrl></PackageIconUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
@@ -12,16 +11,21 @@
     <PackageTags>Celin.AIS, Oracle, E1, AIS</PackageTags>
     <Title>Celin.AIS.Data</Title>
     <Description>A Pidgin AIS Data Parser</Description>
+    <PackageVersion>3.1.0</PackageVersion>
+    <PackageIconUrl>https://www.gravatar.com/avatar/82cf5b024555fa259f9dd9e448afe2ee</PackageIconUrl>
+    <Company>Bragason and Associates Pty Ltd</Company>
     <PackageId>Celin.AIS.Data</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Herdubreid/Celin.AIS.Data</RepositoryUrl>
-    <Version>3.0.0-rc</Version>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2" />
-    <PackageReference Include="Pidgin" Version="2.2.0" />
+    <PackageReference Include="Pidgin" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png">
