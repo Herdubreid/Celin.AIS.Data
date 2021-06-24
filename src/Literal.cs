@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Pidgin;
 using static Pidgin.Parser;
 namespace Celin.AIS.Data

@@ -1,4 +1,4 @@
-﻿using Pidgin;
+using Pidgin;
 using System;
 using static Pidgin.Parser;
 
@@ -8,26 +8,30 @@ namespace Celin.AIS.Data
     class QryOptions
     {
         protected static readonly Parser<char, bool> DEMO =
-            String("demo").ThenReturn(true);
+            String("-demo")
+             .ThenReturn(true)
+             .Labelled("Demo");
         protected static readonly Parser<char, bool> V2 =
-            String("v2").ThenReturn(true);
+            String("-v2")
+             .ThenReturn(true)
+             .Labelled("Version 2");
         protected static readonly Parser<char, string> MAX =
-            String("max")
-            .Then(SkipWhitespaces)
-            .Then(Char('=').Optional())
-            .Then(SkipWhitespaces)
-            .Then(Digit.ManyString());
+            String("-max")
+             .Then(SkipWhitespaces)
+             .Then(Char('=').Optional())
+             .Then(SkipWhitespaces)
+             .Then(Digit.ManyString())
+             .Labelled("Max Records");
         public static Parser<char, QryOptionDef> Parser
-            => Map((d, v, m, end) => new QryOptionDef(d, v, m),
-            Try(DEMO)
-            .Optional(),
+            => Map((d, v, m) => new QryOptionDef(d, v, m),
             SkipWhitespaces
-            .Then(Try(V2))
-            .Optional(),
+             .Then(Try(DEMO)
+             .Optional()),
             SkipWhitespaces
-            .Then(MAX)
-            .Optional(),
+            .Then(Try(V2)
+            .Optional()),
             SkipWhitespaces
-            .Then(Char('.')));
+            .Then(Try(MAX)
+            .Optional()));
     }
 }

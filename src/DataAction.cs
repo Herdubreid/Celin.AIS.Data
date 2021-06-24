@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Pidgin;
 using static Pidgin.Parser;
@@ -6,6 +6,7 @@ namespace Celin.AIS.Data
 {
     public class DataAction
     {
+        public bool IsAggregation { get; set; }
         public string Aliases { get; protected set; } = null;
         public Aggregation Aggregation { get; protected set; } = null;
         public static Parser<char, DataAction> Parser
@@ -13,6 +14,7 @@ namespace Celin.AIS.Data
                .Select(a => a.Any()
                        ? a.Aggregate(new DataAction()
                        {
+                           IsAggregation = true,
                            Aggregation = new Aggregation
                            {
                                aggregations = new List<AggregationItem>(),
@@ -37,7 +39,13 @@ namespace Celin.AIS.Data
                         })
                        : new DataAction()
                       ))
-            .Or(List.Parser
-                .Select(l => new DataAction() { Aliases = l }));
+            .Or(Select.Parser
+                .Select(s => new DataAction()
+                {
+                    Aliases = s.list,
+                    Aggregation = s.order.Count() > 0
+                        ? new Aggregation { orderBy = s.order.ToList() }
+                        : null
+                }));
     }
 }

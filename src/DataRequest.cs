@@ -1,4 +1,5 @@
-﻿using Pidgin;
+using Pidgin;
+using Pidgin.Comment;
 using System.Collections.Generic;
 using System.Linq;
 using static Pidgin.Parser;
@@ -6,12 +7,13 @@ namespace Celin.AIS.Data
 {
     public class DataRequest
     {
+        static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
         public static Parser<char, DatabrowserRequest> Parser
         => Map((s, o, a, q) => new DatabrowserRequest()
         {
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
-            dataServiceType = a.HasValue && a.Value.Aggregation != null ? "AGGREGATION" : "BROWSE",
+            dataServiceType = a.HasValue && a.Value.IsAggregation ? "AGGREGATION" : "BROWSE",
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
             findOnEntry = "TRUE",
@@ -23,15 +25,17 @@ namespace Celin.AIS.Data
                             complexQuery = q.Count() > 1
                                 ? new List<ComplexQuery>(q.Select(r =>
                                     {
-                                        return new ComplexQuery
+                                        var qry = new ComplexQuery
                                         {
-                                            andOr = r.Item1.HasValue ? r.Item1.Value.ToString("G") : AndOrCombinator.AND.ToString("G"),
+                                            andOr = last.ToString("G"),
                                             query = new Query()
                                             {
                                                 matchType = r.Item2.ToString("G"),
                                                 condition = r.Item3 as List<Condition>
                                             }
                                         };
+                                        last = r.Item1.HasValue ? r.Item1.Value : AndOrCombinator.AND;
+                                        return qry;
                                     }))
                                 : null
                         }
@@ -40,19 +44,10 @@ namespace Celin.AIS.Data
             outputType = o.HasValue && o.Value.Item2.HasValue ? "VERSION2" : "GRID_DATA",
             maxPageSize = o.HasValue && o.Value.Item3.HasValue ? o.Value.Item3.Value : null
         },
-         DataSubject.Parser,
-         SkipWhitespaces
-         .Then(
-           QryOptions.Parser
-           .Optional()),
-          SkipWhitespaces
-         .Then(
-          DataAction.Parser
-          .Optional()
-         ),
-         SkipWhitespaces
-         .Then(
-            QryOp.Queries
-         ));
+         Skipper.Next(DataSubject.Parser),
+         Skipper.Next(QryOptions.Parser.Optional()),
+         Skipper.Next(DataAction.Parser.Optional()),
+         Skipper.Next(QryOp.Queries))
+        .Before(CommentParser.SkipLineComment(String("//")).Optional());
     }
 }

@@ -1,4 +1,4 @@
-﻿using Pidgin;
+using Pidgin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,15 +110,17 @@ namespace Celin.AIS.Data
            .Separated(Whitespace)
            .Labelled("Query List");
         public static Parser<char, QueryDef> Query
-            => Map((x, t, c) => new QueryDef(x, t, c),
-            Try(AND)
-            .Or(OR)
-            .Optional(),
+            => Map((t, c, x) => new QueryDef(x, t, c),
+            Try(MATCH_ANY)
+            .Or(MATCH_ALL),
             SkipWhitespaces
-            .Then(Try(MATCH_ANY)
-            .Or(MATCH_ALL)),
-            Parameters
-            .Between(Char('('), Char(')')));
+            .Then(
+             Parameters
+             .Between(Char('('), SkipWhitespaces.Then(Char(')')))),
+            SkipWhitespaces
+            .Then(Try(AND)
+            .Or(OR)
+            .Optional()));
         public static Parser<char, IEnumerable<QueryDef>> Queries
             => Query
                .Separated(Whitespaces);

@@ -1,7 +1,8 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using Pidgin;
 using static Pidgin.Parser;
+
 namespace Celin.AIS.Data
 {
     public enum AggregationType
@@ -57,10 +58,10 @@ namespace Celin.AIS.Data
                .Then(Alias.Array))
              .Labelled("Aggregate Item");
         public static Parser<char, IEnumerable<(AggregationType type, AggregationItem item)>> Array
-        => Try(Parser)
+        => Parser
             .Separated(Whitespace)
-            .Between(Char('['),Char(']'))
+            .Between(Char('['), SkipWhitespaces.Then(Char(']')))
             .Select(a => a.SelectMany(e => e.items.Select(it => (e.type, it))))
-           .Labelled("Aggregation");
+            .Labelled("Aggregation");
     }
 }

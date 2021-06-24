@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Pidgin;
 using static Pidgin.Parser;
 namespace Celin.AIS.Data
@@ -40,7 +40,7 @@ namespace Celin.AIS.Data
         public static Parser<char, IEnumerable<Alias>> Array
         => Try(Parser)
            .Separated(Char(','))
-           .Between(Char('('), Char(')'))
+           .Between(Char('('), SkipWhitespaces.Then(Char(')')))
            .Labelled("Alias Array");
     }
 }
