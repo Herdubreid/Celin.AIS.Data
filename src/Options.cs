@@ -5,7 +5,7 @@ using static Pidgin.Parser;
 namespace Celin.AIS.Data
 {
     using QryOptionDef = ValueTuple<Maybe<bool>, Maybe<bool>, Maybe<string>>;
-    class QryOptions
+    public class QryOptions
     {
         protected static readonly Parser<char, bool> DEMO =
             String("-demo")
@@ -20,7 +20,7 @@ namespace Celin.AIS.Data
              .Then(SkipWhitespaces)
              .Then(Char('=').Optional())
              .Then(SkipWhitespaces)
-             .Then(Digit.ManyString())
+             .Then(OneOf(String("no"), Digit.ManyString()))
              .Labelled("Max Records");
         public static Parser<char, QryOptionDef> Parser
             => Map((d, v, m) => new QryOptionDef(d, v, m),

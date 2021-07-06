@@ -42,7 +42,9 @@ namespace Celin.AIS.Data
                         : null,
             formServiceDemo = o.HasValue && o.Value.Item1.HasValue ? "TRUE" : null,
             outputType = o.HasValue && o.Value.Item2.HasValue ? "VERSION2" : "GRID_DATA",
-            maxPageSize = o.HasValue && o.Value.Item3.HasValue ? o.Value.Item3.Value : null
+            maxPageSize = o.HasValue && o.Value.Item3.HasValue
+            ? o.Value.Item3.Value.Equals("no") ? "No Max" : o.Value.Item3.Value
+            : null
         },
          Skipper.Next(DataSubject.Parser),
          Skipper.Next(QryOptions.Parser.Optional()),
