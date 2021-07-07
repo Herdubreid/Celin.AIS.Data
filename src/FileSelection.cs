@@ -10,14 +10,17 @@ namespace Celin.AIS.Data
             => Map((s, a) => new DatabrowserRequest
             {
                 targetName = s.ToUpper(),
-                dataServiceType = DatabrowserRequest.BROWSE,
-                findOnEntry = Request.TRUE,
                 targetType = DatabrowserRequest.table,
-                returnControlIDs = a.list
+                dataServiceType = a.IsAggregation
+                    ? DatabrowserRequest.AGGREGATION
+                    : DatabrowserRequest.BROWSE,
+                returnControlIDs = a.Aliases,
+                aggregation = a.Aggregation,
+                findOnEntry = Request.TRUE
             },
             Skipper.Next(OneOf('f', 'F')
                 .Then(LetterOrDigit.ManyString(), (p, b) => p + b)),
-            Skipper.Next(Select.Parser));
+            Skipper.Next(DataAction.Parser));
         public static Parser<char, IEnumerable<DatabrowserRequest>> Array
             => Parser
                .Separated(Whitespaces)

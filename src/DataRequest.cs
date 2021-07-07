@@ -14,16 +14,16 @@ namespace Celin.AIS.Data
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
             dataServiceType = a.HasValue && a.Value.IsAggregation
-            ? DatabrowserRequest.AGGREGATION
-            : DatabrowserRequest.BROWSE,
+                ? DatabrowserRequest.AGGREGATION
+                : DatabrowserRequest.BROWSE,
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
-            findOnEntry = "TRUE",
+            findOnEntry = Request.TRUE,
             query = q.Count() > 0
                         ? new Query()
                         {
                             matchType = q.Count() == 1 ? q.First().Item2.ToString("G") : null,
-                            condition = q.Count() == 1 ? q.First().Item3 as List<Condition> : null,
+                            condition = q.Count() == 1 ? q.First().Item3 : null,
                             complexQuery = q.Count() > 1
                                 ? new List<ComplexQuery>(q.Select(r =>
                                     {
@@ -43,7 +43,7 @@ namespace Celin.AIS.Data
                         }
                         : null,
             formServiceDemo = o.HasValue && o.Value.Item1.HasValue ? Request.TRUE : null,
-            outputType = o.HasValue && o.Value.Item2.HasValue ? "VERSION2" : "GRID_DATA",
+            outputType = o.HasValue && o.Value.Item2.HasValue ? Request.VERSION2 : Request.GRID_DATA,
             maxPageSize = o.HasValue && o.Value.Item3.HasValue
             ? o.Value.Item3.Value.Equals("no") ? "No Max" : o.Value.Item3.Value
             : null
