@@ -6,7 +6,7 @@ using static Pidgin.Parser;
 
 namespace Celin.AIS.Data
 {
-    public class CombinedDataAction
+    public class CombinedFileRequest
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
         public static Parser<char, DatabrowserRequest> Parser
@@ -57,7 +57,7 @@ namespace Celin.AIS.Data
             }),
         },
          Skipper.Next(QryOptions.Parser.Optional()),
-         Skipper.Next(DataSelection.Array),
+         Skipper.Next(FileSelection.Array),
          Skipper.Next(QryOp.Queries))
         .Before(CommentParser.SkipLineComment(String("//")).Optional());
     }

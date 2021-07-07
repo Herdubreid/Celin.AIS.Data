@@ -13,7 +13,9 @@ namespace Celin.AIS.Data
         {
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
-            dataServiceType = a.HasValue && a.Value.IsAggregation ? "AGGREGATION" : "BROWSE",
+            dataServiceType = a.HasValue && a.Value.IsAggregation
+            ? DatabrowserRequest.AGGREGATION
+            : DatabrowserRequest.BROWSE,
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
             findOnEntry = "TRUE",
@@ -40,7 +42,7 @@ namespace Celin.AIS.Data
                                 : null
                         }
                         : null,
-            formServiceDemo = o.HasValue && o.Value.Item1.HasValue ? "TRUE" : null,
+            formServiceDemo = o.HasValue && o.Value.Item1.HasValue ? Request.TRUE : null,
             outputType = o.HasValue && o.Value.Item2.HasValue ? "VERSION2" : "GRID_DATA",
             maxPageSize = o.HasValue && o.Value.Item3.HasValue
             ? o.Value.Item3.Value.Equals("no") ? "No Max" : o.Value.Item3.Value

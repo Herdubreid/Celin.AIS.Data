@@ -4,18 +4,19 @@ using static Pidgin.Parser;
 
 namespace Celin.AIS.Data
 {
-    public class DataSelection
+    public class FileSelection
     {
         public static Parser<char, DatabrowserRequest> Parser
             => Map((s, a) => new DatabrowserRequest
             {
-                targetName = s.Name.ToUpper(),
+                targetName = s.ToUpper(),
                 dataServiceType = DatabrowserRequest.BROWSE,
                 findOnEntry = Request.TRUE,
-                targetType = s.Type,
+                targetType = DatabrowserRequest.table,
                 returnControlIDs = a.list
             },
-            Skipper.Next(DataSubject.Parser),
+            Skipper.Next(OneOf('f', 'F')
+                .Then(LetterOrDigit.ManyString(), (p, b) => p + b)),
             Skipper.Next(Select.Parser));
         public static Parser<char, IEnumerable<DatabrowserRequest>> Array
             => Parser
