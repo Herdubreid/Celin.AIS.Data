@@ -1,5 +1,6 @@
 using Pidgin;
 using Pidgin.Comment;
+using System.Collections.Generic;
 using System.Linq;
 using static Pidgin.Parser;
 
@@ -9,7 +10,7 @@ namespace Celin.AIS.Data
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
         public static Parser<char, DatabrowserRequest> Parser
-        => Map((s, o, a, q) => new DatabrowserRequest
+        => Map((s, o, a, q, h) => new DatabrowserRequest
         {
             targetName = s.Name.ToUpper(),
             targetType = s.Type,
@@ -18,6 +19,7 @@ namespace Celin.AIS.Data
                 : DatabrowserRequest.BROWSE,
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
+            having = h.HasValue ? h.Value : null,
             findOnEntry = Request.TRUE,
             query = q.Count() > 0
                 ? new Query()
@@ -67,7 +69,8 @@ namespace Celin.AIS.Data
          Skipper.Next(DataSubject.Parser),
          Skipper.Next(QryOptions.Parser.Optional()),
          Skipper.Next(DataAction.Parser.Optional()),
-         Skipper.Next(QryOp.Queries))
+         Skipper.Next(QryOp.Queries),
+         Skipper.Next(Having.Parser.Optional()))
         .Before(CommentParser.SkipLineComment(String("//")).Optional());
     }
 }

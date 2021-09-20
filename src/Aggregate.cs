@@ -36,11 +36,11 @@ namespace Celin.AIS.Data
         public static Parser<char, (AggregationType type, IEnumerable<AggregationItem> items)> Parser
         => Map((t, a)
                => (t.type, a.Select(e =>
-                new AggregationItem()
+                new AggregationItem
                 {
                     aggregation = t.type == AggregationType.AGGREGATIONS ? t.attrib : null,
                     direction = t.type == AggregationType.ORDER_BY ? t.attrib : null,
-                    column = e.ToString()
+                    column = e.ToString(),
                 })),
                Whitespaces
                .Then(OneOf(
