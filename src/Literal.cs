@@ -1,10 +1,21 @@
-using System.Collections.Generic;
 using Pidgin;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using static Pidgin.Parser;
+
 namespace Celin.AIS.Data
 {
     public class Literal
     {
+        public static readonly Regex VARIABLE = new Regex(@"^%VARIABLE:(\w+)(?>\[(\d+)\])?:%");
+        static readonly Parser<char, int> Index =
+            Try(DecimalNum.Between(Char('['), Char(']')));
+        static readonly Parser<char, string> VariableName =
+            Try(Char('@'))
+                .Then(LetterOrDigit
+                      .ManyString(), (h, t) => t);
+        static readonly Parser<char, string> Variable =
+            Map((name, index) => $"%VARIABLE:{name}{(index.HasValue ? $"[{index.Value}]" : string.Empty)}:%", VariableName, Index.Optional());
         static readonly Parser<char, string> Plain =
             Try(LetterOrDigit)
                 .Then(LetterOrDigit
@@ -15,6 +26,7 @@ namespace Celin.AIS.Data
                 .Between(Char('"'));
         public static Parser<char, string> Parser
             => Plain
+               .Or(Variable)
                .Or(Quoted)
                .Labelled("Literal");
         public static Parser<char, IEnumerable<string>> Array

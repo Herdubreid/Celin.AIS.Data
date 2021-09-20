@@ -1,15 +1,15 @@
 using Pidgin;
 using Pidgin.Comment;
-using System.Collections.Generic;
 using System.Linq;
 using static Pidgin.Parser;
+
 namespace Celin.AIS.Data
 {
     public class DataRequest
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
         public static Parser<char, DatabrowserRequest> Parser
-        => Map((s, o, a, q) => new DatabrowserRequest()
+        => Map((s, o, a, q) => new DatabrowserRequest
         {
             targetName = s.Name.ToUpper(),
             targetType = s.Type,

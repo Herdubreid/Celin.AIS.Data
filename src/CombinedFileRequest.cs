@@ -1,7 +1,5 @@
 ﻿using Pidgin;
 using Pidgin.Comment;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using static Pidgin.Parser;
 
@@ -15,9 +13,9 @@ namespace Celin.AIS.Data
         {
             batchDataRequest = true,
             formServiceDemo = o.HasValue && o.Value.Item1.HasValue ? Request.TRUE : null,
-            maxPageSize = o.HasValue && o.Value.Item3.HasValue ? o.Value.Item3.Value : null,
             dataRequests = s.Select(r =>
             {
+                r.maxPageSize = o.HasValue && o.Value.Item3.HasValue ? o.Value.Item3.Value : null;
                 r.query = q.Count() > 0
                     ? new Query()
                     {

@@ -24,7 +24,7 @@ namespace Celin.AIS.Data
         public static Parser<char, IEnumerable<DatabrowserRequest>> Array
             => Parser
                .Separated(Whitespaces)
-               .Between(Char('('), SkipWhitespaces.Then(Char(')')))
+               .Between(Char('['), SkipWhitespaces.Then(Char(']')))
                .Labelled("Data Selection Array");
     }
 }
