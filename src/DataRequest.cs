@@ -20,13 +20,16 @@ namespace Celin.AIS.Data
             returnControlIDs = a.HasValue ? a.Value.Aliases : null,
             aggregation = a.HasValue ? a.Value.Aggregation : null,
             having = h.HasValue
-                ? h.Value.Select(c =>
+                ? new AIS.Having
                 {
-                    c.controlId = c.controlId.Contains('.')
-                        ? c.controlId
-                        : $"{s.Name.ToUpper()}.{c.controlId}";
-                    return c;
-                })
+                    condition = h.Value.Select(c =>
+                    {
+                        c.controlId = c.controlId.Contains('.')
+                            ? c.controlId
+                            : $"{s.Name.ToUpper()}.{c.controlId}";
+                        return c;
+                    })
+                }
                 : null,
             findOnEntry = Request.TRUE,
             query = q.Count() > 0
