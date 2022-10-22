@@ -1,6 +1,5 @@
 using Pidgin;
 using Pidgin.Comment;
-using System.Collections.Generic;
 using System.Linq;
 using static Pidgin.Parser;
 
@@ -9,7 +8,7 @@ namespace Celin.AIS.Data
     public class DataRequest
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
-        public static Parser<char, DatabrowserRequest> Parser
+        public static Parser<char, Request> Parser
         => Map((s, o, a, q, h) => new DatabrowserRequest
         {
             targetName = s.Name.ToUpper(),
@@ -76,11 +75,11 @@ namespace Celin.AIS.Data
             maxPageSize = o.HasValue && o.Value.Item3.HasValue
             ? o.Value.Item3.Value.Equals("no") ? "No Max" : o.Value.Item3.Value
             : null
-        },
+        } as Request,
          Skipper.Next(DataSubject.Parser),
          Skipper.Next(QryOptions.Parser.Optional()),
          Skipper.Next(DataAction.Parser.Optional()),
-         Skipper.Next(QryOp.Queries),
+         Skipper.Next(QryOp.DataQueries),
          Skipper.Next(Having.Parser.Optional()))
         .Before(CommentParser.SkipLineComment(String("//")).Optional());
     }

@@ -5,15 +5,7 @@ namespace Celin.AIS.Data
 {
     public class Alias
     {
-        public string Prefix { get; protected set; }
-        public string Id { get; protected set; }
-        public override string ToString()
-        {
-            return Prefix is null
-                ? Id.ToUpper()
-                : string.Format("{0}.{1}", Prefix.ToUpper(), Id.ToUpper());
-        }
-        protected static Parser<char, string> LString =
+        static readonly Parser<char, string> LString =
             Try(SkipWhitespaces.Then(Letter))
                 .Then(LetterOrDigit
                       .ManyString(), (h, t) => h + t);
@@ -21,12 +13,10 @@ namespace Celin.AIS.Data
             Char('.')
                 .Then(LString)
                 .Select(name => name);
-        public static Parser<char, Alias> Parser
-        => Map((p, s) => new Alias()
-            {
-                Prefix = s is null ? null : p,
-                Id = s is null ? p : s
-            },
+        public static Parser<char, string> Parser
+        => Map((p, s) => s is null
+            ? p.ToUpper() 
+            : string.Format("{0}.{1}", p.ToUpper(), s.ToUpper()),
             LString,
             AliasSuffix
             .Optional()
@@ -37,7 +27,7 @@ namespace Celin.AIS.Data
            .Separated(Char(','))
            .Select(els => string.Join("|", els))
            .Labelled("Alias List");
-        public static Parser<char, IEnumerable<Alias>> Array
+        public static Parser<char, IEnumerable<string>> Array
         => Try(Parser)
            .Separated(Char(','))
            .Between(Char('('), SkipWhitespaces.Then(Char(')')))

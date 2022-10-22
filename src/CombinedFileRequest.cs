@@ -8,7 +8,7 @@ namespace Celin.AIS.Data
     public class CombinedFileRequest
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
-        public static Parser<char, DatabrowserRequest> Parser
+        public static Parser<char, Request> Parser
         => Map((o, s, q) => new DatabrowserRequest()
         {
             batchDataRequest = true,
@@ -62,10 +62,10 @@ namespace Celin.AIS.Data
                     : null;
                 return r;
             }),
-        },
+        } as Request,
          Skipper.Next(QryOptions.Parser.Optional()),
          Skipper.Next(FileSelection.Array),
-         Skipper.Next(QryOp.Queries))
+         Skipper.Next(QryOp.DataQueries))
         .Before(CommentParser.SkipLineComment(String("//")).Optional());
     }
 }

@@ -21,7 +21,7 @@ namespace Celin.AIS.Data
                 return o;
             },
             OneOf(SUM, AVG, COUNT),
-            QryOp.Parameter.Between(Char('('), Char(')')));
+            QryOp.DataParameter.Between(Char('('), Char(')')));
         public static Parser<char, IEnumerable<Condition>> Parser
             => Parameter
             .Separated(Whitespace)

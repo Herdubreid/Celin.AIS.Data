@@ -1,7 +1,7 @@
-using Pidgin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pidgin;
 using static Pidgin.Parser;
 
 namespace Celin.AIS.Data
@@ -85,44 +85,82 @@ namespace Celin.AIS.Data
                 STR_BLANK,
                 STR_NOT_BLANK)
                 .Between(SkipWhitespaces);
-        public static Parser<char, Condition> Parameter
+        public static Parser<char, Condition> DataParameter
         => Map((l, o, r) => new Condition()
         {
             controlId = l.ToString(),
             @operator = o.ToString("G"),
-            value = r.HasValue
-                       ? r.Value
-                           .Select(e => new Value()
-                           {
-                               content = e,
-                               specialValueId = "LITERAL"
-                           }).ToArray()
-                       : null
+            value = r.Select(e => new Value()
+            {
+                content = e,
+                specialValueId = Value.LITERAL
+            }).ToArray()
         },
          SkipWhitespaces
          .Then(Alias.Parser),
          QUERY_OPERATOR,
          Literal.Array
-         .Optional()
         ).Labelled("Query Condition");
-        public static Parser<char, IEnumerable<Condition>> Parameters
-        => Try(Parameter)
+        public static Parser<char, IEnumerable<Condition>> DataParameters
+        => Try(DataParameter)
            .Separated(Whitespace)
            .Labelled("Query List");
-        public static Parser<char, QueryDef> Query
+        public static Parser<char, QueryDef> DataQuery
             => Map((t, c, x) => new QueryDef(x, t, c),
             Try(MATCH_ANY)
             .Or(MATCH_ALL),
             SkipWhitespaces
             .Then(
-             Parameters
+             DataParameters
              .Between(Char('('), SkipWhitespaces.Then(Char(')')))),
             SkipWhitespaces
             .Then(Try(AND)
             .Or(OR)
             .Optional()));
-        public static Parser<char, IEnumerable<QueryDef>> Queries
-            => Query
+        public static Parser<char, IEnumerable<QueryDef>> DataQueries
+            => DataQuery
+               .Separated(Whitespaces);
+        static readonly Parser<char, string> ControlId =
+            Digit
+            .ManyString()
+            .Then(Digit
+                .AtLeastOnceString()
+                .Between(Char('['), Char(']')).Optional(), (pre, post)
+                => (string.IsNullOrEmpty(pre) ? "1" : pre) + (post.HasValue ? $"[{post.Value}]" : string.Empty));
+        public static Parser<char, Condition> FormParameter
+        => Map((l, o, r) => new Condition()
+        {
+            controlId = l.ToString(),
+            @operator = o.ToString("G"),
+            value = r.Select(e => new Value()
+            {
+                content = e,
+                specialValueId = Value.LITERAL
+            }).ToArray()
+        },
+         SkipWhitespaces
+         .Then(ControlId),
+         QUERY_OPERATOR,
+         Literal.Array
+        ).Labelled("Query Condition");
+        public static Parser<char, IEnumerable<Condition>> FormParameters
+        => Try(FormParameter)
+           .Separated(Whitespace)
+           .Labelled("Query List");
+        public static Parser<char, QueryDef> FormQuery
+            => Map((t, c, x) => new QueryDef(x, t, c),
+            Try(MATCH_ANY)
+            .Or(MATCH_ALL),
+            SkipWhitespaces
+            .Then(
+             FormParameters
+             .Between(Char('('), SkipWhitespaces.Then(Char(')')))),
+            SkipWhitespaces
+            .Then(Try(AND)
+            .Or(OR)
+            .Optional()));
+        public static Parser<char, IEnumerable<QueryDef>> FormQueries
+            => FormQuery
                .Separated(Whitespaces);
     }
 }

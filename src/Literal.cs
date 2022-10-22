@@ -20,7 +20,7 @@ namespace Celin.AIS.Data
             Try(LetterOrDigit)
                 .Then(LetterOrDigit
                       .ManyString(), (h, t) => h + t);
-        static readonly Parser<char, string> Quoted =
+        public static readonly Parser<char, string> Quoted =
             AnyCharExcept('"')
                 .ManyString()
                 .Between(Char('"'));
@@ -30,8 +30,8 @@ namespace Celin.AIS.Data
                .Or(Quoted)
                .Labelled("Literal");
         public static Parser<char, IEnumerable<string>> Array
-            => Try(Parser)
-               .Separated(Char(','))
+            => Parser
+               .SeparatedAtLeastOnce(Char(','))
                .Labelled("Literal Array");
     }
 }
