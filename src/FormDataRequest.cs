@@ -8,7 +8,7 @@ namespace Celin.AIS.Data
     public class FormDataRequest
     {
         static AndOrCombinator last { get; set; } = AndOrCombinator.AND;
-        public static Parser<char, AIS.Request> Parser
+        public static Parser<char, Request> Parser
             => Map((s, v, o, c, q) => new AIS.FormRequest
             {
                 findOnEntry = AIS.Request.TRUE,
