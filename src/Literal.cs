@@ -20,14 +20,16 @@ namespace Celin.AIS.Data
             Try(LetterOrDigit)
                 .Then(LetterOrDigit
                       .ManyString(), (h, t) => h + t);
-        public static readonly Parser<char, string> Quoted =
+        public static readonly Parser<char, string> DoubleQuoted =
             AnyCharExcept('"')
                 .ManyString()
                 .Between(Char('"'));
+        public static readonly Parser<char, string> SingleQuoted =
+            AnyCharExcept('\'')
+                .ManyString()
+                .Between(Char('\''));
         public static Parser<char, string> Parser
-            => Plain
-               .Or(Variable)
-               .Or(Quoted)
+            => OneOf(Plain, Variable, DoubleQuoted, SingleQuoted)
                .Labelled("Literal");
         public static Parser<char, IEnumerable<string>> Array
             => Parser

@@ -5,7 +5,7 @@ namespace Celin.AIS.Data
     public class List
     {
         static Parser<char, string> Item
-            => Literal.Quoted.Map(s => '"' + s + '"')
+            => Literal.DoubleQuoted.Map(s => '"' + s + '"')
             .Or(Alias.Parser);
         public static Parser<char, string> Parser
         => Try(
