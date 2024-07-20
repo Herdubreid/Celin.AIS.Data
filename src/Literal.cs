@@ -15,7 +15,9 @@ namespace Celin.AIS.Data
                 .Then(LetterOrDigit
                       .ManyString(), (h, t) => t);
         static readonly Parser<char, string> Variable =
-            Map((name, index) => $"%VARIABLE:{name}{(index.HasValue ? $"[{index.Value}]" : string.Empty)}:%", VariableName, Index.Optional());
+            Map((name, index) => $"%VARIABLE:{name}{(index.HasValue ? $"[{index.Value}]" : string.Empty)}:%",
+                VariableName,
+                Index.Optional());
         public static readonly Parser<char, string> Plain =
             Try(LetterOrDigit)
                 .Then(LetterOrDigit
