@@ -9,16 +9,18 @@ namespace Celin.AIS.Data
     {
         static Parser<char, IEnumerable<AggregationItem>> OrderBy
             => Map((d, a) => (a.Select(e => new AggregationItem { direction = d.ToUpper(), column = e.ToString() })),
-                 String("desc").Or(String("asc")),
+                 Base.Tok("desc").Or(Base.Tok("asc")),
                  Alias.Array)
                .Labelled("Order By");
         public static Parser<char, (string list, IEnumerable<AggregationItem> order)> Parser
             => Map((l, o) 
                 => (l.HasValue ? l.Value : string.Empty, o.HasValue ? o.Value.SelectMany(e => e) : Enumerable.Empty<AggregationItem>()),
                  List.Parser.Optional(),
-                 Skipper.Next(OrderBy
+                 Skipper.Next(
+                     OrderBy
+                     .Before(SkipWhitespaces)
                      .Separated(Whitespace)
-                     .Between(String("by["), Char(']')).Optional()))
+                     .Between(Base.Tok("by["), SkipWhitespaces.Then(Char(']'))).Optional()))
                 .Labelled("Select");
     }
 }
