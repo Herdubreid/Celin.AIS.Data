@@ -102,7 +102,7 @@ namespace Celin.AIS.Data
          Literal.Array
         ).Labelled("Query Condition");
         public static Parser<char, IEnumerable<Condition>> DataParameters
-        => Try(DataParameter.Before(SkipWhitespaces))
+        => Try(DataParameter)
            .Separated(Whitespace)
            .Labelled("Query List");
         public static Parser<char, QueryDef> DataQuery
@@ -125,7 +125,7 @@ namespace Celin.AIS.Data
             .ManyString()
             .Then(Digit
                 .AtLeastOnceString()
-                .Between(Char('['), SkipWhitespaces.Then(Char(']'))).Optional(), (pre, post)
+                .Between(Char('['), Char(']')).Optional(), (pre, post)
                 => (string.IsNullOrEmpty(pre) ? "1" : pre) + (post.HasValue ? $"[{post.Value}]" : string.Empty));
         public static Parser<char, Condition> FormParameter
         => Map((l, o, r) => new Condition()
