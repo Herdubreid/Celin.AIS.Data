@@ -8,6 +8,6 @@ public class Base
     public static Parser<char, T> Tok<T>(Parser<char, T> p)
         => Try(p).Before(SkipWhitespaces);
 
-    public static Parser<char, char> Tok(char value) => Tok(Char(value));
-    public static Parser<char, string> Tok(string value) => Tok(String(value));
+    public static Parser<char, char> Tok(char value) => Tok(CIChar(value));
+    public static Parser<char, string> Tok(string value) => Tok(CIString(value));
 }
