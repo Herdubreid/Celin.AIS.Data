@@ -1,7 +1,6 @@
 using Pidgin;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static Pidgin.Parser;
 
 namespace Celin.AIS.Data;
@@ -15,7 +14,7 @@ public class Literal
         Try(DecimalNum.Between(Char('['), Char(']')));
     static readonly Parser<char, string> VariableName =
         Try(Char('@'))
-            .Then(LetterOrDigit
+            .Then(OneOf(LetterOrDigit, Char('_'))
                   .ManyString(), (h, t) => t);
     static readonly Parser<char, string> Variable =
         Map((name, index) => GetVariable(name, (index.HasValue ? index.Value : null)),
