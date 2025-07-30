@@ -6,9 +6,9 @@ namespace Celin.AIS.Data
     public class Alias
     {
         static readonly Parser<char, string> LString =
-            Try(SkipWhitespaces.Then(Letter))
+            Try(SkipWhitespaces
                 .Then(LetterOrDigit
-                      .ManyString(), (h, t) => h + t);
+                      .ManyString()));
         static readonly Parser<char, string> AliasSuffix =
             Char('.')
                 .Then(LString)
